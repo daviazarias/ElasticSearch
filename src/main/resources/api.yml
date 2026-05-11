@@ -5,6 +5,23 @@ info:
   description: Initial example to submit Elasticsearch queries
 
 paths:
+  /:
+    get:
+      summary: 'Returns the main page'
+      operationId: root
+      responses:
+        200:
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /search:
     get:
       summary: 'Submits a query to Elasticsearch'
