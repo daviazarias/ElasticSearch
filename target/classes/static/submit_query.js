@@ -9,7 +9,7 @@ function sendQuery() {
             }
             return response.json();
         })
-        .then(data => console.log(data))
+        .then(data => showResults(data))
         .catch(error => console.error('Fetch error:', error));
 }
 
@@ -20,3 +20,23 @@ input.addEventListener("keydown", (event) => {
         sendQuery();
     }
 });
+
+const resultsList = document.getElementById("results")
+function showResults(data) {
+    resultsList.replaceChildren();
+    for (let result of data) {
+        var tituloContainer = document.createElement("dt");
+
+        var link = document.createElement("a");
+        link.textContent = result.title;
+        link.href = result.url;
+        link.target = "_blank";
+        tituloContainer.appendChild(link);
+
+        var abstractContainer = document.createElement("dd");
+        abstractContainer.textContent = result.abs;
+
+        resultsList.appendChild(tituloContainer);
+        resultsList.appendChild(abstractContainer);
+    }
+}
