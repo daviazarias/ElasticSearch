@@ -10,21 +10,6 @@
         <input type="text" id="query" placeholder="Digite sua pesquisa" required>
         <button type="button" onclick="sendQuery()">Pesquisar</button>
     </form>
-    <script>
-        function sendQuery() {
-            const query = document.getElementById('query').value;
-            const queryURL = encodeURIComponent(query);
-            const url = "/search?query=" + queryURL;
-            fetch('http://localhost:8080/v1' + url)
-                .then(response => {
-                    if(!response.ok) {
-                        throw new Error('Não foi ok :(');
-                    }
-                    return response.json();
-                })
-                .then(data => console.log(data))
-                .catch(error => console.error('Fetch error:', error));
-        }
-    </script>
+    <script src="/submit_query.js"></script>
 </body>
 </html>
