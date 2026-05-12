@@ -6,7 +6,6 @@
 package com.elasticsearch.search.api.facade;
 
 import com.elasticsearch.search.api.model.Error;
-import com.elasticsearch.search.api.model.SearchResults;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,41 +31,28 @@ import java.util.concurrent.CompletableFuture;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-12T11:51:44.941754894-03:00[America/Sao_Paulo]")
 
 @Validated
-@Api(value = "search", description = "the search API")
-public interface SearchApi {
+@Api(value = "default", description = "the default API")
+public interface DefaultApi {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
     /**
-     * GET /search : Submits a query to Elasticsearch
+     * GET / : Returns the main page
      *
-     * @param query Query to be submitted (optional)
-     * @param page Page number of results (optional, default to 1)
      * @return OK (status code 200)
      *         or Unexpected error (status code 500)
      */
-    @ApiOperation(value = "Submits a query to Elasticsearch", nickname = "search", notes = "", response = SearchResults.class, tags={ "search", })
+    @ApiOperation(value = "Returns the main page", nickname = "root", notes = "", response = String.class, tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = SearchResults.class),
+        @ApiResponse(code = 200, message = "OK", response = String.class),
         @ApiResponse(code = 500, message = "Unexpected error", response = Error.class) })
-    @RequestMapping(value = "/search",
-        produces = { "application/json" }, 
+    @RequestMapping(value = "/",
+        produces = { "text/html", "application/json" }, 
         method = RequestMethod.GET)
-    default CompletableFuture<ResponseEntity<SearchResults>> search(@ApiParam(value = "Query to be submitted") @Valid @RequestParam(value = "query", required = false) String query,@ApiParam(value = "Page number of results", defaultValue = "1") @Valid @RequestParam(value = "page", required = false, defaultValue="1") Integer page) {
-        return CompletableFuture.supplyAsync(()-> {
-            getRequest().ifPresent(request -> {
-                for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                    if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                        String exampleString = "{ \"totalHits\" : 0, \"results\" : [ { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" }, { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" } ] }";
-                        ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                        break;
-                    }
-                }
-            });
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-        }, Runnable::run);
+    default CompletableFuture<ResponseEntity<String>> root() {
+        return CompletableFuture.completedFuture(new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED));
 
     }
 

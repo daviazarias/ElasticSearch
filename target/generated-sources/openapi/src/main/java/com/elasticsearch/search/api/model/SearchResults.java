@@ -1,90 +1,80 @@
 package com.elasticsearch.search.api.model;
 
 import java.util.Objects;
+import com.elasticsearch.search.api.model.Result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.io.Serializable;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Result
+ * SearchResults
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-12T11:51:44.941754894-03:00[America/Sao_Paulo]")
 
-public class Result  implements Serializable {
+public class SearchResults  implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("title")
-  private String title;
+  @JsonProperty("totalHits")
+  private Integer totalHits;
 
-  @JsonProperty("url")
-  private String url;
+  @JsonProperty("results")
+  @Valid
+  private List<Result> results = null;
 
-  @JsonProperty("abs")
-  private String abs;
-
-  public Result title(String title) {
-    this.title = title;
+  public SearchResults totalHits(Integer totalHits) {
+    this.totalHits = totalHits;
     return this;
   }
 
   /**
-   * Get title
-   * @return title
+   * Get totalHits
+   * @return totalHits
   */
   @ApiModelProperty(value = "")
 
 
-  public String getTitle() {
-    return title;
+  public Integer getTotalHits() {
+    return totalHits;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
+  public void setTotalHits(Integer totalHits) {
+    this.totalHits = totalHits;
   }
 
-  public Result url(String url) {
-    this.url = url;
+  public SearchResults results(List<Result> results) {
+    this.results = results;
+    return this;
+  }
+
+  public SearchResults addResultsItem(Result resultsItem) {
+    if (this.results == null) {
+      this.results = new ArrayList<>();
+    }
+    this.results.add(resultsItem);
     return this;
   }
 
   /**
-   * Get url
-   * @return url
+   * Get results
+   * @return results
   */
   @ApiModelProperty(value = "")
 
+  @Valid
 
-  public String getUrl() {
-    return url;
+  public List<Result> getResults() {
+    return results;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  public Result abs(String abs) {
-    this.abs = abs;
-    return this;
-  }
-
-  /**
-   * Get abs
-   * @return abs
-  */
-  @ApiModelProperty(value = "")
-
-
-  public String getAbs() {
-    return abs;
-  }
-
-  public void setAbs(String abs) {
-    this.abs = abs;
+  public void setResults(List<Result> results) {
+    this.results = results;
   }
 
 
@@ -96,25 +86,23 @@ public class Result  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Result result = (Result) o;
-    return Objects.equals(this.title, result.title) &&
-        Objects.equals(this.url, result.url) &&
-        Objects.equals(this.abs, result.abs);
+    SearchResults searchResults = (SearchResults) o;
+    return Objects.equals(this.totalHits, searchResults.totalHits) &&
+        Objects.equals(this.results, searchResults.results);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, url, abs);
+    return Objects.hash(totalHits, results);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Result {\n");
+    sb.append("class SearchResults {\n");
     
-    sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("    url: ").append(toIndentedString(url)).append("\n");
-    sb.append("    abs: ").append(toIndentedString(abs)).append("\n");
+    sb.append("    totalHits: ").append(toIndentedString(totalHits)).append("\n");
+    sb.append("    results: ").append(toIndentedString(results)).append("\n");
     sb.append("}");
     return sb.toString();
   }

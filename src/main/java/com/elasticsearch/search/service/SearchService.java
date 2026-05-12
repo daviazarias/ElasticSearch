@@ -1,7 +1,9 @@
 package com.elasticsearch.search.service;
 
 import co.elastic.clients.elasticsearch.core.search.Hit;
+import co.elastic.clients.elasticsearch.core.search.HitsMetadata;
 import com.elasticsearch.search.api.model.Result;
+import com.elasticsearch.search.api.model.SearchResults;
 import com.elasticsearch.search.domain.EsClient;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.stereotype.Service;
@@ -18,18 +20,23 @@ public class SearchService {
         this.esClient = esClient;
     }
 
-    public List<Result> submitQuery(String query, Integer page) {
-        var searchResponse = esClient.search(query, page);
-        List<Hit<ObjectNode>> hits = searchResponse.hits().hits();
+    public SearchResults submitQuery(String query, Integer page) {
+        var resultsResponse = esClient.search(query, page);
+        HitsMetadata<ObjectNode> hits = resultsResponse.hits();
+        List<Hit<ObjectNode>> hits_hits = hits.hits();
 
-        var resultsList = hits.stream().map(h ->
+        int total_hits = (int) hits.total().value();
+
+        var resultsList = hits_hits.stream().map(h ->
                 new Result()
                         .abs(treatContent(h.source().get("content").asText()))
                         .title(h.source().get("title").asText())
                         .url(h.source().get("url").asText())
         ).collect(Collectors.toList());
 
-        return resultsList;
+        SearchResults searchResponse = new SearchResults().totalHits(total_hits).results(resultsList);
+
+        return searchResponse;
     }
 
     private String treatContent(String content) {
