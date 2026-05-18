@@ -16,13 +16,16 @@ import javax.validation.constraints.*;
 /**
  * SearchResults
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-12T11:51:44.941754894-03:00[America/Sao_Paulo]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-18T10:36:16.093622757-03:00[America/Sao_Paulo]")
 
 public class SearchResults  implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("totalHits")
   private Integer totalHits;
+
+  @JsonProperty("numeroPaginas")
+  private Integer numeroPaginas;
 
   @JsonProperty("results")
   @Valid
@@ -46,6 +49,26 @@ public class SearchResults  implements Serializable {
 
   public void setTotalHits(Integer totalHits) {
     this.totalHits = totalHits;
+  }
+
+  public SearchResults numeroPaginas(Integer numeroPaginas) {
+    this.numeroPaginas = numeroPaginas;
+    return this;
+  }
+
+  /**
+   * Get numeroPaginas
+   * @return numeroPaginas
+  */
+  @ApiModelProperty(value = "")
+
+
+  public Integer getNumeroPaginas() {
+    return numeroPaginas;
+  }
+
+  public void setNumeroPaginas(Integer numeroPaginas) {
+    this.numeroPaginas = numeroPaginas;
   }
 
   public SearchResults results(List<Result> results) {
@@ -88,12 +111,13 @@ public class SearchResults  implements Serializable {
     }
     SearchResults searchResults = (SearchResults) o;
     return Objects.equals(this.totalHits, searchResults.totalHits) &&
+        Objects.equals(this.numeroPaginas, searchResults.numeroPaginas) &&
         Objects.equals(this.results, searchResults.results);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalHits, results);
+    return Objects.hash(totalHits, numeroPaginas, results);
   }
 
   @Override
@@ -102,6 +126,7 @@ public class SearchResults  implements Serializable {
     sb.append("class SearchResults {\n");
     
     sb.append("    totalHits: ").append(toIndentedString(totalHits)).append("\n");
+    sb.append("    numeroPaginas: ").append(toIndentedString(numeroPaginas)).append("\n");
     sb.append("    results: ").append(toIndentedString(results)).append("\n");
     sb.append("}");
     return sb.toString();

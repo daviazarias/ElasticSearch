@@ -15,13 +15,14 @@ import java.util.stream.Collectors;
 public class SearchService {
 
     private final EsClient esClient;
+    private int pageSize = 10;
 
     public SearchService(EsClient esClient) {
         this.esClient = esClient;
     }
 
     public SearchResults submitQuery(String query, Integer page) {
-        var resultsResponse = esClient.search(query, page);
+        var resultsResponse = esClient.search(query, page, pageSize);
         HitsMetadata<ObjectNode> hits = resultsResponse.hits();
         List<Hit<ObjectNode>> hits_hits = hits.hits();
 
@@ -34,9 +35,10 @@ public class SearchService {
                         .url(h.source().get("url").asText())
         ).collect(Collectors.toList());
 
-        SearchResults searchResponse = new SearchResults().totalHits(total_hits).results(resultsList);
-
-        return searchResponse;
+        return new SearchResults()
+                .totalHits(total_hits)
+                .numeroPaginas((int) Math.ceil((double) total_hits / pageSize))
+                .results(resultsList);
     }
 
     private String treatContent(String content) {

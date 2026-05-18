@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-12T11:51:44.941754894-03:00[America/Sao_Paulo]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-18T10:36:16.093622757-03:00[America/Sao_Paulo]")
 
 @Validated
 @Api(value = "default", description = "the default API")

@@ -57,8 +57,7 @@ public class EsClient {
         elasticsearchClient = new co.elastic.clients.elasticsearch.ElasticsearchClient(transport);
     }
 
-    public SearchResponse search(String query, Integer page) {
-        int pageSize = 10;
+    public SearchResponse search(String query, Integer page, Integer pageSize) {
         int from = ((page != null ? page : 1) - 1) * pageSize;
         Query matchQuery = MatchQuery.of(q -> q.field("content").query(query))._toQuery();
 

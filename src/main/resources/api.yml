@@ -60,6 +60,8 @@ components:
       properties:
         totalHits:
           type: integer
+        numeroPaginas:
+          type: integer
         results:
           type: array
           items:

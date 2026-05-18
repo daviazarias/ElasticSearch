@@ -25,9 +25,6 @@ const resultsList = document.getElementById("results")
 function showResults(data) {
     resultsList.replaceChildren();
 
-    const total_hits = data.totalHits;
-    console.log(total_hits);
-
     for (let result of data.results) {
         var tituloContainer = document.createElement("dt");
 
