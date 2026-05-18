@@ -21,9 +21,24 @@ input.addEventListener("keydown", (event) => {
     }
 });
 
+const maxPageButtons = 10;
+const pageButtons = document.getElementById("pagination");
+
 const resultsList = document.getElementById("results")
 function showResults(data) {
     resultsList.replaceChildren();
+    pageButtons.replaceChildren();
+
+    pageButtonsNumber = (data.numeroPaginas > maxPageButtons) ? maxPageButtons : data.numeroPaginas;
+
+    for (let i = 1; i <= pageButtonsNumber; i++){
+        var pageButtonContainer = document.createElement("li");
+
+        var button = document.createElement("button");
+        button.textContent = i;
+        pageButtonContainer.appendChild(button);
+        pageButtons.appendChild(pageButtonContainer);
+    }
 
     for (let result of data.results) {
         var tituloContainer = document.createElement("dt");
@@ -41,3 +56,25 @@ function showResults(data) {
         resultsList.appendChild(abstractContainer);
     }
 }
+
+document.querySelector('.pagination').addEventListener('click', (event) => {
+    const botao = event.target.closest('button');
+    if (!botao) return;
+
+    pagina = botao.textContent;
+
+    console.log('Carlos');
+
+    const query = document.getElementById('query').value;
+    const queryURL = encodeURIComponent(query);
+    const url = document.URL + "search?query=" + queryURL + "page=" + pagina;
+    fetch(url)
+        .then(response => {
+            if(!response.ok) {
+                throw new Error('Não foi ok :(');
+            }
+            return response.json();
+        })
+        .then(data => showResults(data))
+        .catch(error => console.error('Fetch error:', error));
+})
