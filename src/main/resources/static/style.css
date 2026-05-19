@@ -1,25 +1,277 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =========================
+   BODY
+========================= */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f6f7f8;
+    color: #202122;
+
+    min-height: 100vh;
+
+    padding: 40px 20px;
+}
+
+/* =========================
+   CONTAINER PRINCIPAL
+========================= */
+
+main {
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+    text-align: center;
+
+    font-family:
+            "Linux Libertine",
+            "Times New Roman",
+            serif;
+
+    font-size: 4rem;
+    font-weight: normal;
+
+    color: #000;
+
+    margin-bottom: 30px;
+
+    letter-spacing: -1px;
+}
+
+/* =========================
+   BARRA DE PESQUISA
+========================= */
+
+#search-bar {
+    display: flex;
+    gap: 12px;
+
+    background: white;
+
+    padding: 18px;
+
+    border: 1px solid #dcdcdc;
+    border-radius: 12px;
+
+    box-shadow:
+            0 2px 6px rgba(0,0,0,0.06);
+
+    margin-bottom: 35px;
+}
+
+#query {
+    flex: 1;
+
+    padding: 14px 18px;
+
+    font-size: 1rem;
+
+    border: 1px solid #a2a9b1;
+    border-radius: 8px;
+
+    outline: none;
+
+    transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+#query:focus {
+    border-color: #3366cc;
+
+    box-shadow:
+            0 0 0 3px rgba(51,102,204,0.15);
+}
+
+#search-bar button {
+    padding: 14px 22px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #3366cc;
+
+    color: white;
+
+    font-size: 1rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+            background 0.2s ease,
+            transform 0.15s ease;
+}
+
+#search-bar button:hover {
+    background: #2a4b8d;
+}
+
+#search-bar button:active {
+    transform: scale(0.96);
+}
+
+/* =========================
+   RESULTADOS
+========================= */
+
+#results {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* Card completo */
+.result-card {
+    background: white;
+
+    border: 1px solid #dcdcdc;
+    border-radius: 14px;
+
+    padding: 22px;
+
+    box-shadow:
+            0 3px 8px rgba(0,0,0,0.05);
+
+    transition:
+            transform 0.15s ease,
+            box-shadow 0.2s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+            0 6px 16px rgba(0,0,0,0.08);
+}
+
+/* Título */
+.result-card a {
+    display: inline-block;
+
+    color: #3366cc;
+
+    font-size: 1.35rem;
+    font-weight: bold;
+
+    text-decoration: none;
+
+    margin-bottom: 12px;
+}
+
+.result-card a:hover {
+    text-decoration: underline;
+}
+
+/* Descrição */
+.result-card p {
+    color: #444;
+
+    line-height: 1.7;
+
+    font-size: 1rem;
+}
+
+/* =========================
+   PAGINAÇÃO
+========================= */
+
+nav {
+    margin-top: 40px;
+}
+
 .pagination {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
     list-style: none;
-    padding: 0;
-    gap: 5px;
+
+    gap: 10px;
 }
 
-.pagination a {
-    padding: 8px 16px;
-    text-decoration: none;
-    color: #333;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    transition: background-color 0.3s;
+.pagination li button {
+    min-width: 44px;
+    height: 44px;
+
+    padding: 0 14px;
+
+    border: 1px solid #a2a9b1;
+    border-radius: 8px;
+
+    background: white;
+
+    color: #202122;
+
+    font-size: 1rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.15s ease;
 }
 
-.pagination a.active {
-    background-color: #007bff;
+.pagination li button:hover {
+    background: #3366cc;
+    border-color: #3366cc;
     color: white;
-    border-color: #007bff;
+
+    transform: translateY(-2px);
 }
 
-.pagination a:hover:not(.active) {
-    background-color: #f1f1f1;
+.pagination li button.active {
+    background: #3366cc;
+    border-color: #3366cc;
+    color: white;
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 20px 12px;
+    }
+
+    .logo {
+        font-size: 3rem;
+    }
+
+    #search-bar {
+        flex-direction: column;
+    }
+
+    #search-bar button {
+        width: 100%;
+    }
+
+    .result-card a {
+        font-size: 1.15rem;
+    }
+
+    .result-card p {
+        font-size: 0.95rem;
+    }
 }
