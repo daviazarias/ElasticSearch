@@ -14,22 +14,13 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+
     background: #f6f7f8;
     color: #202122;
 
     min-height: 100vh;
 
     padding: 40px 20px;
-}
-
-/* =========================
-   CONTAINER PRINCIPAL
-========================= */
-
-main {
-    width: 100%;
-    max-width: 950px;
-    margin: 0 auto;
 }
 
 /* =========================
@@ -59,6 +50,13 @@ main {
 ========================= */
 
 #search-bar {
+    width: 100%;
+    max-width: 950px;
+
+    margin:
+            0 auto
+            35px auto;
+
     display: flex;
     gap: 12px;
 
@@ -67,12 +65,10 @@ main {
     padding: 18px;
 
     border: 1px solid #dcdcdc;
-    border-radius: 12px;
+    border-radius: 14px;
 
     box-shadow:
             0 2px 6px rgba(0,0,0,0.06);
-
-    margin-bottom: 35px;
 }
 
 #query {
@@ -116,11 +112,15 @@ main {
 
     transition:
             background 0.2s ease,
-            transform 0.15s ease;
+            transform 0.15s ease,
+            box-shadow 0.2s ease;
 }
 
 #search-bar button:hover {
     background: #2a4b8d;
+
+    box-shadow:
+            0 4px 10px rgba(51,102,204,0.25);
 }
 
 #search-bar button:active {
@@ -132,37 +132,91 @@ main {
 ========================= */
 
 #results {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
+    width: 100%;
+    max-width: 950px;
+
+    margin: 0 auto;
 }
 
-/* Card completo */
-.result-card {
+/* =========================
+   CARD DOS RESULTADOS
+========================= */
+
+#results dt {
     background: white;
 
-    border: 1px solid #dcdcdc;
-    border-radius: 14px;
+    padding:
+            22px
+            22px
+            10px
+            22px;
 
-    padding: 22px;
+    border:
+            1px solid #dcdcdc;
+
+    border-bottom: none;
+
+    border-radius:
+            14px 14px 0 0;
+
+    margin-top: 22px;
 
     box-shadow:
             0 3px 8px rgba(0,0,0,0.05);
 
     transition:
             transform 0.15s ease,
-            box-shadow 0.2s ease;
+            box-shadow 0.2s ease,
+            border-color 0.2s ease;
 }
 
-.result-card:hover {
-    transform: translateY(-2px);
+#results dd {
+    background: white;
+
+    padding:
+            0
+            22px
+            22px
+            22px;
+
+    margin-left: 0;
+
+    border:
+            1px solid #dcdcdc;
+
+    border-top: none;
+
+    border-radius:
+            0 0 14px 14px;
+
+    color: #444;
+
+    line-height: 1.7;
+
+    box-shadow:
+            0 3px 8px rgba(0,0,0,0.05);
+
+    transition:
+            transform 0.15s ease,
+            box-shadow 0.2s ease,
+            border-color 0.2s ease;
+}
+
+#results dt:hover,
+#results dt:hover + dd {
+    border-color: #c8ccd1;
 
     box-shadow:
             0 6px 16px rgba(0,0,0,0.08);
+
+    transform: translateY(-2px);
 }
 
-/* Título */
-.result-card a {
+/* =========================
+   LINK/TÍTULO
+========================= */
+
+#results dt a {
     display: inline-block;
 
     color: #3366cc;
@@ -172,20 +226,11 @@ main {
 
     text-decoration: none;
 
-    margin-bottom: 12px;
+    line-height: 1.4;
 }
 
-.result-card a:hover {
+#results dt a:hover {
     text-decoration: underline;
-}
-
-/* Descrição */
-.result-card p {
-    color: #444;
-
-    line-height: 1.7;
-
-    font-size: 1rem;
 }
 
 /* =========================
@@ -197,20 +242,30 @@ nav {
 }
 
 .pagination {
+    width: 100%;
+    max-width: 950px;
+
+    margin: 0 auto;
+
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
 
     list-style: none;
 
     gap: 10px;
 }
 
-.pagination li button {
+.pagination li {
+    list-style: none;
+}
+
+.pagination button {
     min-width: 44px;
     height: 44px;
 
-    padding: 0 14px;
+    padding: 0 16px;
 
     border: 1px solid #a2a9b1;
     border-radius: 8px;
@@ -228,21 +283,41 @@ nav {
             background 0.2s ease,
             color 0.2s ease,
             border-color 0.2s ease,
-            transform 0.15s ease;
+            transform 0.15s ease,
+            box-shadow 0.2s ease;
 }
 
-.pagination li button:hover {
+.pagination button:hover {
     background: #3366cc;
     border-color: #3366cc;
+
     color: white;
 
     transform: translateY(-2px);
+
+    box-shadow:
+            0 4px 10px rgba(51,102,204,0.2);
 }
 
-.pagination li button.active {
+/* Página atual */
+
+.pagination button.active {
     background: #3366cc;
-    border-color: #3366cc;
+
     color: white;
+
+    border-color: #3366cc;
+
+    box-shadow:
+            0 0 0 3px rgba(51,102,204,0.18);
+}
+
+/* Botões anterior/próximo */
+
+.pagination button[data-action] {
+    padding: 0 18px;
+
+    font-size: 0.95rem;
 }
 
 /* =========================
@@ -267,11 +342,26 @@ nav {
         width: 100%;
     }
 
-    .result-card a {
+    #results dt a {
         font-size: 1.15rem;
     }
 
-    .result-card p {
+    #results dd {
         font-size: 0.95rem;
+    }
+
+    .pagination {
+        gap: 8px;
+    }
+
+    .pagination button {
+        min-width: 40px;
+        height: 40px;
+
+        font-size: 0.95rem;
+    }
+
+    .pagination button[data-action] {
+        padding: 0 14px;
     }
 }
