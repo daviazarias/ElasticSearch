@@ -58,6 +58,13 @@ function displayPageButtons(totalPages) {
 
     const pagesAmount = Math.min(maxPageButtons, totalPages - initialButton + 1);
 
+    if(currentPage !== 1){
+        const previousButton = document.createElement('button');
+        previousButton.textContent = '« Anterior';
+        previousButton.dataset.action = 'prev'
+        pageButtons.appendChild(previousButton);
+    }
+
     for (let i = 0; i < pagesAmount; i++){
         const pageButtonContainer = document.createElement("li");
 
@@ -66,12 +73,26 @@ function displayPageButtons(totalPages) {
         pageButtonContainer.appendChild(button);
         pageButtons.appendChild(pageButtonContainer);
     }
+
+    if(currentPage !== totalPages){
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Próximo »';
+        nextButton.dataset.action = 'next';
+        pageButtons.appendChild(nextButton);
+    }
 }
 
 document.querySelector('.pagination').addEventListener('click', (event) => {
     const botao = event.target.closest('button');
     if (!botao) return;
-    const pagina = botao.textContent;
-    sendQuery(pagina);
-    currentPage = pagina;
+
+    const acao = botao.dataset.action;
+
+    if(acao === 'prev'){
+        currentPage--;
+    } else if(acao === 'next'){
+        currentPage++;
+    } else currentPage = botao.textContent;
+
+    sendQuery(currentPage);
 })
