@@ -6,6 +6,8 @@ const pageButtons =
 const resultsList =
     document.getElementById("results");
 
+const hitsNumber = document.getElementById("totalHits");
+
 let currentPage = 1;
 
 /* =========================
@@ -69,9 +71,12 @@ input.addEventListener("keydown", (event) => {
 
 function showResults(data) {
 
+    window.scrollTo(0,0);
     resultsList.replaceChildren();
 
     displayPageButtons(data.numeroPaginas);
+
+    hitsNumber.textContent = "Quantidade de resultados: " + data.totalHits;
 
     for (let result of data.results) {
 
