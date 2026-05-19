@@ -43,7 +43,7 @@ public class SearchService {
 
     private String treatContent(String content) {
         content = content.replaceAll("</?(som|math)\\d*>", "");
-        content = content.replaceAll("[^A-Za-z\\s]+", "");
+//        content = content.replaceAll("[^A-Za-z\\s]+", "");
         content = content.replaceAll("\\s+", " ");
         content = content.replaceAll("^\\s+", "");
         return content;
