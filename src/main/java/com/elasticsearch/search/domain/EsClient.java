@@ -1,6 +1,7 @@
 package com.elasticsearch.search.domain;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
@@ -19,6 +20,11 @@ import org.elasticsearch.client.RestClient;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class EsClient {
@@ -57,9 +63,39 @@ public class EsClient {
         elasticsearchClient = new co.elastic.clients.elasticsearch.ElasticsearchClient(transport);
     }
 
+    private List<String> extractPatterns(String input, String regex) {
+        return Pattern.compile(regex)
+                .matcher(input)
+                .results()
+                .map(mr -> mr.group(1))
+                .collect(Collectors.toList());
+    }
+
     public SearchResponse search(String query, Integer page, Integer pageSize) {
         int from = ((page != null ? page : 1) - 1) * pageSize;
-        Query matchQuery = MatchQuery.of(q -> q.field("content").query(query))._toQuery();
+
+        Query matchQuery;
+
+        List<String> mustEntries = extractPatterns(query, "\"(.+?)\"");
+
+        if(mustEntries.isEmpty()) {
+            matchQuery = MatchQuery.of(q -> q.field("content")
+                    .query(query))._toQuery();
+        } else {
+            List<Query> mustQueries = mustEntries
+                    .stream()
+                    .map(q ->
+                            Query.of(sq ->
+                                    sq.matchPhrase(mp ->
+                                            mp.query(q).field("content"))))
+                    .toList();
+
+            matchQuery = BoolQuery.of(b -> b
+                    .must(mustQueries)
+                    .should(sq ->
+                            sq.term(t -> t.field("content").value(query.replace("\"",""))))
+            )._toQuery();
+        }
 
         SearchResponse<ObjectNode> response;
         try {
