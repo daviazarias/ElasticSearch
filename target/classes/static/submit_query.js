@@ -69,6 +69,10 @@ input.addEventListener("keydown", (event) => {
    MOSTRAR RESULTADOS
 ========================= */
 
+function showNoResults(data) {
+    pageButtons.replaceChildren();
+}
+
 function showResults(data) {
 
     window.scrollTo(0,0);
@@ -77,6 +81,11 @@ function showResults(data) {
     displayPageButtons(data.numeroPaginas);
 
     hitsNumber.textContent = "Quantidade de resultados: " + data.totalHits;
+
+    if(data.totalHits === 0){
+        showNoResults();
+        return;
+    }
 
     for (let result of data.results) {
 
@@ -128,30 +137,18 @@ function displayPageButtons(totalPages) {
             ? lesserHalfPageNumber
             : 1;
 
-    const pagesAmount =
-        Math.min(
-            maxPageButtons,
-            totalPages - initialButton + 1
-        );
+    const pagesAmount = Math.min(maxPageButtons, totalPages - initialButton + 1);
 
     /* Botão anterior */
 
     if (currentPage !== 1) {
+        const previousLi = document.createElement("li");
+        const previousButton = document.createElement("button");
 
-        const previousLi =
-            document.createElement("li");
-
-        const previousButton =
-            document.createElement("button");
-
-        previousButton.textContent =
-            "« Anterior";
-
-        previousButton.dataset.action =
-            "prev";
+        previousButton.textContent = "« Anterior";
+        previousButton.dataset.action = "prev";
 
         previousLi.appendChild(previousButton);
-
         pageButtons.appendChild(previousLi);
     }
 
@@ -159,14 +156,9 @@ function displayPageButtons(totalPages) {
 
     for (let i = 0; i < pagesAmount; i++) {
 
-        const pageNumber =
-            initialButton + i;
-
-        const pageButtonContainer =
-            document.createElement("li");
-
-        const button =
-            document.createElement("button");
+        const pageNumber = initialButton + i;
+        const pageButtonContainer = document.createElement("li");
+        const button = document.createElement("button");
 
         button.textContent = pageNumber;
 
@@ -177,28 +169,19 @@ function displayPageButtons(totalPages) {
         }
 
         pageButtonContainer.appendChild(button);
-
         pageButtons.appendChild(pageButtonContainer);
     }
 
     /* Botão próximo */
 
     if (currentPage !== totalPages) {
+        const nextLi = document.createElement("li");
+        const nextButton = document.createElement("button");
 
-        const nextLi =
-            document.createElement("li");
-
-        const nextButton =
-            document.createElement("button");
-
-        nextButton.textContent =
-            "Próximo »";
-
-        nextButton.dataset.action =
-            "next";
+        nextButton.textContent = "Próximo »";
+        nextButton.dataset.action = "next";
 
         nextLi.appendChild(nextButton);
-
         pageButtons.appendChild(nextLi);
     }
 }
