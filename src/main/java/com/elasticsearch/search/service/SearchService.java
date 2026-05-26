@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,12 +29,24 @@ public class SearchService {
 
         int total_hits = (int) hits.total().value();
 
-        var resultsList = hits_hits.stream().map(h ->
-                new Result()
-                        .abs(treatContent(h.source().get("content").asText()))
-                        .title(h.source().get("title").asText())
-                        .url(h.source().get("url").asText())
-        ).collect(Collectors.toList());
+        var resultsList = hits_hits.stream().map(h -> {
+
+            String abstractContent = "";
+
+            if (h.highlight() != null && h.highlight().get("content") != null) {
+                abstractContent = h.highlight()
+                        .get("content")
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.joining(" "));
+            }
+
+            return new Result()
+                    .abs(treatContent(abstractContent))
+                    .title(h.source().get("title").asText())
+                    .url(h.source().get("url").asText());
+
+        }).collect(Collectors.toList());
 
         return new SearchResults()
                 .totalHits(total_hits)

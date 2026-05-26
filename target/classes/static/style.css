@@ -137,6 +137,11 @@ body {
     left: 170px;
 }
 
+em {
+    font-weight: bold;
+    font-style: normal;
+}
+
 #results {
     width: 100%;
     max-width: 950px;

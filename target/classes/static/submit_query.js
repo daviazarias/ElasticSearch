@@ -78,7 +78,7 @@ function showResults(data) {
 
         /* Resumo */
         const abstractContainer = document.createElement("dd");
-        abstractContainer.textContent = result.abs;
+        abstractContainer.innerHTML = result.abs;
 
         /* Adiciona */
         resultsList.appendChild(tituloContainer);

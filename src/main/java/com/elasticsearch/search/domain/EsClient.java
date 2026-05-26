@@ -6,6 +6,8 @@ import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MultiMatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.search.BoundaryScanner;
+import co.elastic.clients.elasticsearch.core.search.Highlight;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
@@ -70,7 +72,7 @@ public class EsClient {
                 .collect(Collectors.toList());
     }
 
-    public Query createQueryWithMandatoryPhrases(List<String> mandatoryPhrases, String originalQuery){
+    private Query createQueryWithMandatoryPhrases(List<String> mandatoryPhrases, String originalQuery){
         List<Query> mustQueriesList = mandatoryPhrases
                 .stream()
                 .map(phrase ->
@@ -107,11 +109,23 @@ public class EsClient {
                 ? MultiMatchQuery.of(q-> q.fields("content^1.0","title^3.0").query(query))._toQuery()
                 : createQueryWithMandatoryPhrases(mustEntries,query);
 
+        Highlight highlight = Highlight.of(h -> h
+                .fields("content", hf -> hf
+                        .numberOfFragments(0)
+                        .boundaryScanner(BoundaryScanner.Sentence)
+                )
+                .preTags("<em>")
+                .postTags("</em>")
+        );
+
         SearchResponse<ObjectNode> response;
         try {
             response = elasticsearchClient.search(s -> s
-                .index("wikipedia").from(from).size(pageSize)
-                .query(matchQuery), ObjectNode.class
+                    .index("wikipedia")
+                    .from(from)
+                    .size(pageSize)
+                    .query(matchQuery)
+                    .highlight(highlight), ObjectNode.class
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
