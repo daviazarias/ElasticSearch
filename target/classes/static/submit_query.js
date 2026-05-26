@@ -1,13 +1,7 @@
 const maxPageButtons = 10;
-
-const pageButtons =
-    document.getElementById("pagination");
-
-const resultsList =
-    document.getElementById("results");
-
+const pageButtons = document.getElementById("pagination");
+const resultsList = document.getElementById("results");
 const hitsNumber = document.getElementById("totalHits");
-
 let currentPage = 1;
 
 /* =========================
@@ -16,31 +10,19 @@ let currentPage = 1;
 
 function sendQuery(page) {
 
-    const query =
-        document.getElementById('query').value;
-
-    const queryURL =
-        "query=" + encodeURIComponent(query);
-
-    const pageURL =
-        page ? ("&page=" + page) : "";
-
-    const url =
-        document.URL + "search?" + queryURL + pageURL;
+    const query = document.getElementById('query').value;
+    const queryURL = "query=" + encodeURIComponent(query);
+    const pageURL = page ? ("&page=" + page) : "";
+    const url = document.URL + "search?" + queryURL + pageURL;
 
     fetch(url)
-
         .then(response => {
-
             if (!response.ok) {
-                throw new Error('Não foi ok :(');
+                throw new Error('Servidor não respondeu.');
             }
-
             return response.json();
         })
-
         .then(data => showResults(data))
-
         .catch(error =>
             console.error('Fetch error:', error)
         );
@@ -54,13 +36,9 @@ const input =
     document.querySelector("input");
 
 input.addEventListener("keydown", (event) => {
-
     if (event.key === "Enter") {
-
         event.preventDefault();
-
         currentPage = 1;
-
         sendQuery(null);
     }
 });
@@ -69,7 +47,7 @@ input.addEventListener("keydown", (event) => {
    MOSTRAR RESULTADOS
 ========================= */
 
-function showNoResults(data) {
+function showNoResults() {
     pageButtons.replaceChildren();
 }
 
@@ -90,33 +68,20 @@ function showResults(data) {
     for (let result of data.results) {
 
         /* Título */
-
-        const tituloContainer =
-            document.createElement("dt");
-
-        const link =
-            document.createElement("a");
+        const tituloContainer = document.createElement("dt");
+        const link = document.createElement("a");
 
         link.textContent = result.title;
-
         link.href = result.url;
-
         link.target = "_blank";
-
         tituloContainer.appendChild(link);
 
         /* Resumo */
-
-        const abstractContainer =
-            document.createElement("dd");
-
-        abstractContainer.textContent =
-            result.abs;
+        const abstractContainer = document.createElement("dd");
+        abstractContainer.textContent = result.abs;
 
         /* Adiciona */
-
         resultsList.appendChild(tituloContainer);
-
         resultsList.appendChild(abstractContainer);
     }
 }
@@ -164,7 +129,7 @@ function displayPageButtons(totalPages) {
 
         /* Página atual */
 
-        if (pageNumber == currentPage) {
+        if (pageNumber === currentPage) {
             button.classList.add("active");
         }
 
@@ -193,27 +158,17 @@ function displayPageButtons(totalPages) {
 document.querySelector('.pagination')
     .addEventListener('click', (event) => {
 
-        const botao =
-            event.target.closest('button');
-
+        const botao = event.target.closest('button');
         if (!botao) return;
 
-        const acao =
-            botao.dataset.action;
+        const acao = botao.dataset.action;
 
         if (acao === 'prev') {
-
             currentPage--;
-
         } else if (acao === 'next') {
-
             currentPage++;
-
         } else {
-
-            currentPage =
-                parseInt(botao.textContent);
+            currentPage = parseInt(botao.textContent);
         }
-
         sendQuery(currentPage);
     });

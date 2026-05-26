@@ -20,9 +20,7 @@ import org.elasticsearch.client.RestClient;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -71,6 +69,24 @@ public class EsClient {
                 .collect(Collectors.toList());
     }
 
+    public Query createQueryWithMandatoryPhrases(List<String> mandatoryPhrases, String originalQuery){
+        List<Query> mustQueriesList = mandatoryPhrases
+                .stream()
+                .map(phrase ->
+                        Query.of(sq ->
+                                sq.matchPhrase(mp ->
+                                        mp.query(phrase).field("content"))))
+                .toList();
+
+        String filteredQuery = originalQuery.replace("\"", "");
+
+        return BoolQuery.of(b -> b
+                .must(mustQueriesList)
+                .should(sq ->
+                        sq.term(t -> t.field("content").value(filteredQuery)))
+        )._toQuery();
+    }
+
     public SearchResponse search(String query, Integer page, Integer pageSize) {
         int from = ((page != null ? page : 1) - 1) * pageSize;
 
@@ -78,24 +94,9 @@ public class EsClient {
 
         List<String> mustEntries = extractPatterns(query, "\"(.+?)\"");
 
-        if(mustEntries.isEmpty()) {
-            matchQuery = MatchQuery.of(q -> q.field("content")
-                    .query(query))._toQuery();
-        } else {
-            List<Query> mustQueries = mustEntries
-                    .stream()
-                    .map(q ->
-                            Query.of(sq ->
-                                    sq.matchPhrase(mp ->
-                                            mp.query(q).field("content"))))
-                    .toList();
-
-            matchQuery = BoolQuery.of(b -> b
-                    .must(mustQueries)
-                    .should(sq ->
-                            sq.term(t -> t.field("content").value(query.replace("\"",""))))
-            )._toQuery();
-        }
+        matchQuery = (mustEntries.isEmpty())
+                ? MatchQuery.of(q-> q.field("content").query(query))._toQuery()
+                : createQueryWithMandatoryPhrases(mustEntries,query);
 
         SearchResponse<ObjectNode> response;
         try {
