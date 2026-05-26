@@ -3,6 +3,7 @@ package com.elasticsearch.search.domain;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.MultiMatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
@@ -75,15 +76,23 @@ public class EsClient {
                 .map(phrase ->
                         Query.of(sq ->
                                 sq.matchPhrase(mp ->
-                                        mp.query(phrase).field("content"))))
-                .toList();
+                                        mp.query(phrase).field("content")
+                                )
+                        )
+                ).toList();
 
         String filteredQuery = originalQuery.replace("\"", "");
 
+        Query shouldQuery = Query.of(q -> q
+                .multiMatch(mmq -> mmq
+                        .query(filteredQuery)
+                        .fields("content^1.0", "title^3.0")
+                )
+        );
+
         return BoolQuery.of(b -> b
                 .must(mustQueriesList)
-                .should(sq ->
-                        sq.term(t -> t.field("content").value(filteredQuery)))
+                .should(shouldQuery)
         )._toQuery();
     }
 
@@ -95,7 +104,7 @@ public class EsClient {
         List<String> mustEntries = extractPatterns(query, "\"(.+?)\"");
 
         matchQuery = (mustEntries.isEmpty())
-                ? MatchQuery.of(q-> q.field("content").query(query))._toQuery()
+                ? MultiMatchQuery.of(q-> q.fields("content^1.0","title^3.0").query(query))._toQuery()
                 : createQueryWithMandatoryPhrases(mustEntries,query);
 
         SearchResponse<ObjectNode> response;
