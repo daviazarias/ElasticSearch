@@ -23,6 +23,7 @@ import org.elasticsearch.client.RestClient;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -72,6 +73,23 @@ public class EsClient {
                 .collect(Collectors.toList());
     }
 
+    private Query createSimpleQuery(String query){
+
+        List<String> searchedWords = Arrays.stream(query.split("\\s+")).toList();
+
+        List<Query> queriesList = searchedWords
+                .stream().map(word ->
+                        Query.of(q -> q
+                                .multiMatch(mm -> mm
+                                    .fields("content^1.0", "title^3.0")
+                                    .query(word).queryName(word)
+                                )
+                        )
+                ).toList();
+
+        return Query.of(q -> q.bool(b -> b.should(queriesList)));
+    }
+
     private Query createQueryWithMandatoryPhrases(List<String> mandatoryPhrases, String originalQuery){
         List<Query> mustQueriesList = mandatoryPhrases
                 .stream()
@@ -89,6 +107,7 @@ public class EsClient {
                 .multiMatch(mmq -> mmq
                         .query(filteredQuery)
                         .fields("content^1.0", "title^3.0")
+                        .queryName(filteredQuery)
                 )
         );
 
@@ -106,16 +125,13 @@ public class EsClient {
         List<String> mustEntries = extractPatterns(query, "\"(.+?)\"");
 
         matchQuery = (mustEntries.isEmpty())
-                ? MultiMatchQuery.of(q-> q.fields("content^1.0","title^3.0").query(query))._toQuery()
+                ? createSimpleQuery(query)
                 : createQueryWithMandatoryPhrases(mustEntries,query);
 
         Highlight highlight = Highlight.of(h -> h
                 .fields("content", hf -> hf
                         .numberOfFragments(0)
-                        .boundaryScanner(BoundaryScanner.Sentence)
                 )
-                .preTags("<em>")
-                .postTags("</em>")
         );
 
         SearchResponse<ObjectNode> response;

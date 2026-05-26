@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-18T10:36:16.093622757-03:00[America/Sao_Paulo]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-26T11:07:26.360877552-03:00[America/Sao_Paulo]")
 
 @Validated
 @Api(value = "search", description = "the search API")
@@ -59,7 +59,7 @@ public interface SearchApi {
             getRequest().ifPresent(request -> {
                 for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                     if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                        String exampleString = "{ \"totalHits\" : 0, \"numeroPaginas\" : 6, \"results\" : [ { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" }, { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" } ] }";
+                        String exampleString = "{ \"totalHits\" : 0, \"numeroPaginas\" : 6, \"results\" : [ { \"abs\" : \"abs\", \"notFoundWords\" : [ \"notFoundWords\", \"notFoundWords\" ], \"title\" : \"title\", \"url\" : \"url\" }, { \"abs\" : \"abs\", \"notFoundWords\" : [ \"notFoundWords\", \"notFoundWords\" ], \"title\" : \"title\", \"url\" : \"url\" } ] }";
                         ApiUtil.setExampleResponse(request, "application/json", exampleString);
                         break;
                     }

@@ -8,6 +8,7 @@ import com.elasticsearch.search.domain.EsClient;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -41,10 +42,17 @@ public class SearchService {
                         .collect(Collectors.joining(" "));
             }
 
+            List<String> notFoundWords = List.of(query.split("[\\s+]"))
+                    .stream()
+                    .filter(word -> !h.matchedQueries().contains(word))
+                    .filter(word -> word.charAt(0) != '"' && word.charAt(word.length() - 1) != '"')
+                    .toList();
+
             return new Result()
                     .abs(treatContent(abstractContent))
                     .title(h.source().get("title").asText())
-                    .url(h.source().get("url").asText());
+                    .url(h.source().get("url").asText())
+                    .notFoundWords(notFoundWords);
 
         }).collect(Collectors.toList());
 

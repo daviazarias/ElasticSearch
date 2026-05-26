@@ -75,6 +75,11 @@ components:
           type: string
         abs:
           type: string
+        notFoundWords:
+          type: array
+          items:
+            type: string
+
     Error:
       type: object
       required:

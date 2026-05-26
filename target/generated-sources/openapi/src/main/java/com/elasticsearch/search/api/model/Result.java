@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.io.Serializable;
 import javax.validation.Valid;
@@ -13,7 +15,7 @@ import javax.validation.constraints.*;
 /**
  * Result
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-18T10:36:16.093622757-03:00[America/Sao_Paulo]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-05-26T11:07:26.360877552-03:00[America/Sao_Paulo]")
 
 public class Result  implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -26,6 +28,10 @@ public class Result  implements Serializable {
 
   @JsonProperty("abs")
   private String abs;
+
+  @JsonProperty("notFoundWords")
+  @Valid
+  private List<String> notFoundWords = null;
 
   public Result title(String title) {
     this.title = title;
@@ -87,6 +93,34 @@ public class Result  implements Serializable {
     this.abs = abs;
   }
 
+  public Result notFoundWords(List<String> notFoundWords) {
+    this.notFoundWords = notFoundWords;
+    return this;
+  }
+
+  public Result addNotFoundWordsItem(String notFoundWordsItem) {
+    if (this.notFoundWords == null) {
+      this.notFoundWords = new ArrayList<>();
+    }
+    this.notFoundWords.add(notFoundWordsItem);
+    return this;
+  }
+
+  /**
+   * Get notFoundWords
+   * @return notFoundWords
+  */
+  @ApiModelProperty(value = "")
+
+
+  public List<String> getNotFoundWords() {
+    return notFoundWords;
+  }
+
+  public void setNotFoundWords(List<String> notFoundWords) {
+    this.notFoundWords = notFoundWords;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -99,12 +133,13 @@ public class Result  implements Serializable {
     Result result = (Result) o;
     return Objects.equals(this.title, result.title) &&
         Objects.equals(this.url, result.url) &&
-        Objects.equals(this.abs, result.abs);
+        Objects.equals(this.abs, result.abs) &&
+        Objects.equals(this.notFoundWords, result.notFoundWords);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, url, abs);
+    return Objects.hash(title, url, abs, notFoundWords);
   }
 
   @Override
@@ -115,6 +150,7 @@ public class Result  implements Serializable {
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    url: ").append(toIndentedString(url)).append("\n");
     sb.append("    abs: ").append(toIndentedString(abs)).append("\n");
+    sb.append("    notFoundWords: ").append(toIndentedString(notFoundWords)).append("\n");
     sb.append("}");
     return sb.toString();
   }
