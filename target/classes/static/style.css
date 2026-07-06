@@ -1,48 +1,88 @@
+/* =========================================================
+   MATHPEDIA — FOLHA DE ESTILO
+   Conceito: papel quadriculado de caderno de matemática,
+   tinta de caneta-tinteiro para o texto e "caneta vermelha"
+   de professor para anotações (palavras não encontradas).
+   O nome "MathPedia" usa a mesma família tipográfica do
+   logotipo da Wikipédia (Linux Libertine / Libertinus Serif).
+========================================================= */
+
+:root {
+    /* Cor */
+    --color-bg: #f7f2e7;
+    --color-surface: #fffdf8;
+    --color-ink: #1e2a38;
+    --color-ink-soft: #5c6b7a;
+    --color-accent: #2f6f5e;
+    --color-accent-dark: #1e4a3d;
+    --color-accent-tint: #e3ede8;
+    --color-redpen: #a63a2e;
+    --color-border: #ddd3ba;
+    --color-grid: rgba(47, 90, 122, 0.08);
+
+    /* Tipografia */
+    --font-display: 'Libertinus Serif', 'Linux Libertine', 'Times New Roman', serif;
+    --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+    --font-ui: -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
 /* =========================
-   RESET
+   RESET E BASE
 ========================= */
 
-* {
-    margin: 0;
-    padding: 0;
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
-/* =========================
-   BODY
-========================= */
-
 body {
-    font-family: Arial, Helvetica, sans-serif;
-
-    background: #f6f7f8;
-    color: #202122;
-
+    margin: 0;
     min-height: 100vh;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    background-color: var(--color-bg);
+    /* papel quadriculado sutil, como um caderno de exercícios */
+    background-image:
+            linear-gradient(var(--color-grid) 1px, transparent 1px),
+            linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+}
 
-    padding: 40px 20px;
+a {
+    color: inherit;
 }
 
 /* =========================
-   LOGO
+   CABEÇALHO / LOGOTIPO
 ========================= */
 
 .logo {
+    display: block;
+    width: fit-content;
+    margin: 3.5rem auto 0;
+    padding: 0 0.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 4vw + 1.5rem, 4.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    color: var(--color-ink);
     text-align: center;
+}
 
-    font-family:
-            "Linux Libertine",
-            "Times New Roman",
-            serif;
-
-    font-size: 4rem;
-    font-weight: normal;
-
-    color: #000;
-
-    margin-bottom: 30px;
-
-    letter-spacing: -1px;
+.logo::after {
+    content: "Definições, teoremas e referências matemáticas";
+    display: block;
+    margin: 0.65rem auto 0;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    white-space: nowrap;
 }
 
 /* =========================
@@ -50,347 +90,242 @@ body {
 ========================= */
 
 #search-bar {
-    width: 100%;
-    max-width: 950px;
-
-    margin:
-            0 auto
-            35px auto;
-
     display: flex;
-    gap: 12px;
-
-    background: white;
-
-    padding: 18px;
-
-    border: 1px solid #dcdcdc;
-    border-radius: 14px;
-
-    box-shadow:
-            0 2px 6px rgba(0,0,0,0.06);
+    gap: 0.75rem;
+    max-width: 620px;
+    margin: 2.5rem auto 1.5rem;
+    padding: 0 1rem;
 }
 
 #query {
     flex: 1;
-
-    padding: 14px 18px;
-
+    min-width: 0;
+    padding: 0.85rem 1.1rem;
+    font-family: var(--font-serif);
     font-size: 1rem;
-
-    border: 1px solid #a2a9b1;
-    border-radius: 8px;
-
-    outline: none;
-
-    transition:
-            border-color 0.2s ease,
-            box-shadow 0.2s ease;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(30, 42, 56, 0.06);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 #query:focus {
-    border-color: #3366cc;
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-tint);
+}
 
-    box-shadow:
-            0 0 0 3px rgba(51,102,204,0.15);
+#query::placeholder {
+    color: var(--color-ink-soft);
+    opacity: 0.8;
 }
 
 #search-bar button {
-    padding: 14px 22px;
-
-    border: none;
-    border-radius: 8px;
-
-    background: #3366cc;
-
-    color: white;
-
+    padding: 0.85rem 1.6rem;
+    font-family: var(--font-serif);
     font-size: 1rem;
-    font-weight: bold;
-
+    font-weight: 600;
+    color: var(--color-surface);
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent-dark);
+    border-radius: 4px;
     cursor: pointer;
-
-    transition:
-            background 0.2s ease,
-            transform 0.15s ease,
-            box-shadow 0.2s ease;
+    transition: background-color 0.15s ease, transform 0.05s ease;
 }
 
 #search-bar button:hover {
-    background: #2a4b8d;
-
-    box-shadow:
-            0 4px 10px rgba(51,102,204,0.25);
+    background: var(--color-accent-dark);
 }
 
 #search-bar button:active {
-    transform: scale(0.96);
+    transform: translateY(1px);
+}
+
+#search-bar button:focus-visible,
+#query:focus-visible {
+    outline: 2px solid var(--color-accent-dark);
+    outline-offset: 2px;
 }
 
 /* =========================
-   RESULTADOS
+   CONTAGEM DE RESULTADOS
 ========================= */
 
 #totalHits {
-    font-size: 0.9rem;
-    position: relative;
-    left: 170px;
-}
-
-em {
-    font-weight: bold;
-    font-style: normal;
-}
-
-#results {
-    width: 100%;
-    max-width: 950px;
-
-    margin: 10px auto 25px auto;
-
-    margin-top: -10px;
-
-    padding-left: 2px;
-
-    color: #54595d;
-
-    font-size: 0.95rem;
-    font-weight: normal;
-
-    border-bottom: 1px solid #eaecf0;
-    padding-bottom: 10px;
+    max-width: 720px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    text-align: center;
 }
 
 /* =========================
-   CARD DOS RESULTADOS
+   LISTA DE RESULTADOS
 ========================= */
 
+#results {
+    max-width: 720px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+}
+
 #results dt {
-    background: white;
+    margin-top: 1.85rem;
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--color-accent-dark);
+    animation: entrada 0.25s ease both;
+}
 
-    padding:
-            22px
-            22px
-            10px
-            22px;
+#results dt:first-child {
+    margin-top: 0;
+}
 
-    border:
-            1px solid #dcdcdc;
+#results dt a {
+    text-decoration: none;
+    background-image: linear-gradient(var(--color-accent) 0 0);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition: background-size 0.2s ease;
+}
 
-    border-bottom: none;
-
-    border-radius:
-            14px 14px 0 0;
-
-    margin-top: 22px;
-
-    box-shadow:
-            0 3px 8px rgba(0,0,0,0.05);
-
-    transition:
-            transform 0.15s ease,
-            box-shadow 0.2s ease,
-            border-color 0.2s ease;
+#results dt a:hover,
+#results dt a:focus-visible {
+    background-size: 100% 1px;
 }
 
 #results dd {
-    background: white;
-
-    padding:
-            0
-            22px
-            22px
-            22px;
-
-    margin-left: 0;
-
-    border:
-            1px solid #dcdcdc;
-
-    border-top: none;
-
-    border-radius:
-            0 0 14px 14px;
-
-    color: #444;
-
+    margin: 0.4rem 0 0;
+    font-family: var(--font-serif);
+    font-size: 1rem;
     line-height: 1.7;
-
-    box-shadow:
-            0 3px 8px rgba(0,0,0,0.05);
-
-    transition:
-            transform 0.15s ease,
-            box-shadow 0.2s ease,
-            border-color 0.2s ease;
+    color: var(--color-ink);
+    animation: entrada 0.25s ease both;
 }
 
-#results dt:hover,
-#results dt:hover + dd {
-    border-color: #c8ccd1;
-
-    box-shadow:
-            0 6px 16px rgba(0,0,0,0.08);
-
-    transform: translateY(-2px);
+/* Destaques de busca dentro do resumo (<em>): negrito, sem itálico */
+#results dd em {
+    font-weight: 700;
+    font-style: normal;
+    color: inherit;
 }
 
-/* =========================
-   LINK/TÍTULO
-========================= */
-
-#results dt a {
-    display: inline-block;
-
-    color: #3366cc;
-
-    font-size: 1.35rem;
-    font-weight: bold;
-
-    text-decoration: none;
-
-    line-height: 1.4;
-}
-
-#results dt a:hover {
-    text-decoration: underline;
+/* Palavras não encontradas — nota de "caneta vermelha", como
+   uma correção nas margens de uma prova de matemática */
+#results dd.not-found-words {
+    margin-top: 0.6rem;
+    padding-left: 0.65rem;
+    border-left: 2px solid var(--color-redpen);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--color-redpen);
+    letter-spacing: 0.01em;
 }
 
 /* =========================
    PAGINAÇÃO
 ========================= */
 
-nav {
-    margin-top: 40px;
-}
-
 .pagination {
-    width: 100%;
-    max-width: 950px;
-
-    margin: 0 auto;
-
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-
+    gap: 0.4rem;
+    max-width: 720px;
+    margin: 1rem auto 4rem;
+    padding: 0 1rem;
     list-style: none;
-
-    gap: 10px;
 }
 
 .pagination li {
-    list-style: none;
+    display: flex;
 }
 
 .pagination button {
-    min-width: 44px;
-    height: 44px;
-
-    padding: 0 16px;
-
-    border: 1px solid #a2a9b1;
-    border-radius: 8px;
-
-    background: white;
-
-    color: #202122;
-
-    font-size: 1rem;
-    font-weight: bold;
-
+    min-width: 2.15rem;
+    height: 2.15rem;
+    padding: 0 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
     cursor: pointer;
-
-    transition:
-            background 0.2s ease,
-            color 0.2s ease,
-            border-color 0.2s ease,
-            transform 0.15s ease,
-            box-shadow 0.2s ease;
+    transition: border-color 0.12s ease, color 0.12s ease, background-color 0.12s ease;
 }
 
 .pagination button:hover {
-    background: #3366cc;
-    border-color: #3366cc;
-
-    color: white;
-
-    transform: translateY(-2px);
-
-    box-shadow:
-            0 4px 10px rgba(51,102,204,0.2);
+    border-color: var(--color-accent);
+    color: var(--color-accent-dark);
 }
-
-/* Página atual */
 
 .pagination button.active {
-    background: #3366cc;
-
-    color: white;
-
-    border-color: #3366cc;
-
-    box-shadow:
-            0 0 0 3px rgba(51,102,204,0.18);
+    background: var(--color-accent);
+    border-color: var(--color-accent-dark);
+    color: var(--color-surface);
+    font-weight: 600;
 }
 
-/* Botões anterior/próximo */
-
-.pagination button[data-action] {
-    padding: 0 18px;
-
-    font-size: 0.95rem;
-}
-
-.not-found-words {
-    font-size: 0.75rem;
-    color: #777;
+.pagination button:focus-visible {
+    outline: 2px solid var(--color-accent-dark);
+    outline-offset: 2px;
 }
 
 /* =========================
-   RESPONSIVIDADE
+   ANIMAÇÃO DE ENTRADA
 ========================= */
 
-@media (max-width: 700px) {
+@keyframes entrada {
+    from {
+        opacity: 0;
+        transform: translateY(2px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-    body {
-        padding: 20px 12px;
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 640px) {
+    .logo {
+        margin-top: 2.5rem;
+        font-size: 2.25rem;
     }
 
-    .logo {
-        font-size: 3rem;
+    .logo::after {
+        letter-spacing: 0.14em;
+        white-space: normal;
     }
 
     #search-bar {
         flex-direction: column;
+        margin-top: 2rem;
     }
 
     #search-bar button {
-        width: 100%;
-    }
-
-    #results dt a {
-        font-size: 1.15rem;
-    }
-
-    #results dd {
-        font-size: 0.95rem;
-    }
-
-    .pagination {
-        gap: 8px;
-    }
-
-    .pagination button {
-        min-width: 40px;
-        height: 40px;
-
-        font-size: 0.95rem;
-    }
-
-
-    .pagination button[data-action] {
-        padding: 0 14px;
+        padding: 0.75rem 1rem;
     }
 }
