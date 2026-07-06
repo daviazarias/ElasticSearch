@@ -343,6 +343,11 @@ nav {
     font-size: 0.95rem;
 }
 
+.not-found-words {
+    font-size: 0.75rem;
+    color: #777;
+}
+
 /* =========================
    RESPONSIVIDADE
 ========================= */

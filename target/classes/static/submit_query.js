@@ -83,6 +83,16 @@ function showResults(data) {
         /* Adiciona */
         resultsList.appendChild(tituloContainer);
         resultsList.appendChild(abstractContainer);
+
+        /* Palavras não encontradas */
+        if (result.notFoundWords && result.notFoundWords.length > 0) {
+            const notFoundContainer = document.createElement("dd");
+            notFoundContainer.classList.add("not-found-words");
+            notFoundContainer.textContent =
+                "Palavras não encontradas: " + result.notFoundWords.join(", ");
+
+            resultsList.appendChild(notFoundContainer);
+        }
     }
 }
 
